@@ -1,0 +1,68 @@
+---
+title: "Give your paper a descriptive title"
+author: "Your Name"
+abstract: \singlespacing 1-2 sentences max setting up why your paper is important. One sentence that describes your research question. 1-2 sentences describing your data and methods. 1-2 sentences describing your main results. One sentence stating the implications (optional).
+thanks: "Use this space to acknowledge help you received completed the project. You should thank your peer reviewer and your code checker by name and acknowledge comments from your classmates in ECO 324 at Smith College Spring 2020, in addition to anyone else that provided useful assistance."
+header-includes:
+   - \usepackage{setspace}
+   - \doublespacing
+output: 
+  pdf_document:
+    number_sections: true
+bibliography: template.bib
+---
+
+```{r setup, echo = F, message = F}
+knitr::opts_chunk$set(results = 'asis', cache = F)
+library(tidyverse)
+library(summarytools)
+```
+
+# Introduction
+
+Follow the introduction "formula" we developed in class to write your introduction. A well written introduction is relatively short and accomplishes the following tasks:
+
+- Motivates the importance of the research question
+- Clearly states the research question, the methods, and the main findings
+
+# Literature Review
+
+While it has become common in economic journal articles to include the literature review in a somewhat expanded introduction, we will continue to have a separate section for the literature review. You will submit an initial version in the Literature Review assignment. Although it will look somewhat messy, I encourage you to use this template to complete that assignment. 
+
+Before submitting the literature review assignment, remove all the placeholder and descriptive text in this section and replace it with your literature review. Remember to follow the guidelines in the assignment prompt, which is based on the literature review assignment described in @marshall2019writing. **You should leave the placeholder text in other sections unless you have begun working in the other sections.** When you submit the literature review, your grade will be based on only information appearing in the literature review section of the document, but you are free to begin work on other sections of the paper and include those in your repository.
+
+# Data and Methods
+
+An initial version of this section should be submitted for the Data & Methods Assignment (along with the completed Data Appendix). In completing these sections, refer to the assignment prompts. Again, make sure this descriptive text is removed before submission. Your literature review will remain in the document, but I will only assess your data and methods for this assignment.
+
+## Conceptual or Theoretical Model
+
+You are encouraged to change the heading for this subsection to something that refers to your context like the example in the sample paper (A Model of Park Visitation). 
+
+If you are **not** using a regression model in your analysis, this section will likely need to be significantly longer.
+
+## Data
+
+Following the guidelines in the assignment prompt, describe the key features of your data. This section should include a table of summary statistics for all numerical variables in your data and a discussion of important patterns or caveats.
+
+## Model Specification
+
+This section should explain and justify your empirical model specification. It should include an explicit statement of your regression model in a similar format as the one in the sample paper:
+
+$rec\_visits_{imy} = \beta_{1}svr\_median_{imy} + \beta_{2}svr\_p10_{imy} + \alpha_{im} + \gamma_{y} + \epsilon_{imy}$
+
+where $i$ indexes parks, $m$ indexes month of the year, and $y$ indexes year. (Make sure you include subscript indices and explain what they mean). As long as the variable names are the same ones you used above, you do not need to explain them again here. Describe any fixed effects you use include and the justification for using them. Explain how the coefficients in your regression model will help answer your research question.
+
+# Results & Discussion
+
+Present your results here and discuss them. Make sure to consider the magnitude of your effects. This requires you to understand your data. Consider using the standard deviation of your variables to give readers a sense of the size of the effects.
+
+Make sure you return to your research question and discuss what your results tell us about the question you set out to answer.
+
+*Note: if you are using RMarkdown to write your paper, I encourage you to conduct your analysis directly within this file.*
+
+# Conclusion
+
+This brief section will summarize the main conlcusios of the paper, offer concluding comments and may include some discussion of caveats, possible next steps for someone interested in your research *topic*, and any policy or other implications you wish to discuss.
+
+# References

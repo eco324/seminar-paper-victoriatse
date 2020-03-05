@@ -1,0 +1,117 @@
+---
+title: "Data Appendix to \"Name of your paper\""
+author: "Your name"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+---
+
+```{r setup, echo = F, message = F}
+knitr::opts_chunk$set(results = 'asis', cache = F)
+library(tidyverse)
+library(summarytools)
+st_options(plain.ascii = F,
+           style = "rmarkdown",
+           footnote = NA,
+           subtitle.emphasis = F,
+           dfSummary.silent = T,
+           dfSummary.valid.col = F,
+           tmp.img.dir = "./tmp",
+           dfSummary.style = "grid")
+
+#The following custom function simplifies the process of writing dfSummaries to html files
+export_summary_table <- function(dfSummary_output){
+  data_info <- attr(dfSummary_output, "data_info")
+  ds_name <- data_info$Data.frame
+  print(dfSummary_output,
+      file = str_c("output/", ds_name, "_summary.html"),
+      method = "browser",
+      report.title = ds_name)
+}
+```
+
+```{r set dfSummary css style, echo = F, include = F}
+st_css()
+```
+# Appendix description
+*Your Data Appendix should begin with a brief statement explaining its purpose like the following one.*
+
+This Data Appendix documents the data used in "Papter Title". It was prepared in a Rmarkdown document that contains both the documentation and the R code used to prepare the data used in the final estimation. It also includes descriptive statistics for both the original data and the final dataset, with a discussion of any issues of note.
+
+The datasets used directly by the final analysis are saved in `processed-data/` at the end of this file.
+
+*Note: this document structure will require you to re-run steps of your analysis multiple times. If your code takes a long time, please come talk with me about strategies to reduce run time or save earlier results.*
+
+# Instructions for Use
+This document includes instructions for how to create your Data Appendix. Outside of this section, instruction paragraphs are listed in *italics* (like the first paragraph above). Instructions should be removed before submission.
+
+To start creating your own data appendix, follow these steps: 
+
+1. Replace the title and author in the section at the top of the file (called the YAML).
+1. Commit your changes with a message like "customizing data appendix".
+1. Delete this instruction section of the document.
+1. Remove any other instructions in italics and examples from the completed sections of the document.
+
+Remember that you will submit your assignment by committing and then pushing your versions to your repository. I encourage you to commit your changes often as you work, but there are three specific points at which you need to both submit and push changes, corresponding to course deadlines:
+
+1. You must submit a version with the original data section completed by the Data Appendix 1 deadline. This will include the .Rmd file, the .pdf file, and the html data summary files stored in the output folder.
+2. You must submit a version with all parts completed by the Data Appendix 2 deadline.  
+3. You must submit a final version of this document that is consistent with your final paper by the final project deadline.  
+
+While creating your data appendix, refer regularly to the assignment descriptions posted on Moodle.
+
+A few tips:
+
+- When creating a list like this one, be sure to put an empty line above the list. If you don't do this, your entries won't be formatted a list.
+- Make sure you have empty lines above and below section and subsection headings.
+- When creating numbered lists, you can number all items in your list with 1. Rmarkdown will number them sequentially when it creates your final document.
+
+# Raw data
+*Each dataset you use will have its own documentation section. The next subsection in this document (Dataset description) is a template. You can copy this section and paste it into your document each time you need to add a section for a new dataset. Note that each line in the Dataset description section __must__ end with two spaces.* 
+This section documents the datasets used in this analysis.
+
+## Dataset description
+**Citation:** Put citation here in APA or other consistent format that you will use throughout the project. Include a hyperlink if applicable.  
+**DOI:** If the dataset has a documention identified (DOI) assigned put it here.  
+**Date Downloaded:** Identify when you downloaded the dataset.  
+**Filename(s):** raw_data/filename.csv *If you have a large number of files you can use a patten (see visit data below)*
+**Unit of observation:** What distinguishes different rows in your dataset?  
+**Dates covered:** What time frame does the data cover?  
+
+### To obtain a copy
+
+Describe in a step-by-step fashion how an interested user could obtain the data.
+
+### Importable version (if necessary)
+
+**Filename(s):** importable-data/filename-importable.csv
+
+In some cases the raw data is not directly importable. In this case, you should fully document every step you took to create the importable data in a subsection like this one. 
+
+### Variable descriptions
+
+Create a bullet list with the name of each variable in the dataset followed by any information the user would need to understand it.
+
+- **variable_name:** Variable description. 
+- **variable_name2:** Description of second variable.
+
+### Data import code and summary
+
+*Once you've described the variables, enter an R chunk by selecting Code -> Insert Chunk, or Ctrl+Alt+I, give it a name to describe the dataset you are importing. After importing, export a dataframe summary using the command.*
+
+`export_summary_table(dfSummary(dataset_name))`
+
+*While it will make your resulting file long, you should not modify the chunk options to suppress printing of code and output. I would likely not include this in the documentation for an actual paper I was submitting, but including them here will let me read your code and the output message from R and may help identify data import concerns early in the process. Since these files will exist only electronically, their length is less of a concern. If you like to print out files to proofread and want me to help you shorten the printed versions, let me know. We can temporarily modify the chunk options for printing and restore them before you submit the assignment.*
+
+
+# Data Processing and Combination
+*This section should include a discussion of the processing and merging steps needed to create your basic data. The code to implement these steps should be included in chunks in this section. Once the final merged data has been created, you should use the dfSummary function again to summarize the data you will be using. You should also save a file containing all the objects you will use in your final analysis to the processed_data folder.*
+
+# Analysis Variables
+
+This section should include a description of all the variables that are used in your final analysis. At the end of the section, you should save all of these variables in the processed_data folder of your repository.
+
+# Discussion of Data
+
+*This section should include a discussion of any data patterns you notice based on the summaries created in the code above.*
