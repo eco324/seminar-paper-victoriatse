@@ -1,6 +1,6 @@
 ---
 title: "Data Appendix to \"Name of your paper\""
-author: "Your name"
+author: "Victoria Tse"
 output: 
   pdf_document:
     toc: true
@@ -104,6 +104,21 @@ Create a bullet list with the name of each variable in the dataset followed by a
 
 *While it will make your resulting file long, you should not modify the chunk options to suppress printing of code and output. I would likely not include this in the documentation for an actual paper I was submitting, but including them here will let me read your code and the output message from R and may help identify data import concerns early in the process. Since these files will exist only electronically, their length is less of a concern. If you like to print out files to proofread and want me to help you shorten the printed versions, let me know. We can temporarily modify the chunk options for printing and restore them before you submit the assignment.*
 
+```{r import data}
+hh_data <- read_csv(file.path("raw-data","mts-survey-data","HH.txt"), guess_max = 15000)
+``` 
+```{r import data}
+per_data <- read_csv(file.path("raw-data","mts-survey-data","PER.txt"), guess_max = 15000)
+``` 
+```{r import data}
+place_data <- read_csv(file.path("raw-data","mts-survey-data","PLACE.txt"), guess_max = 15000)
+``` 
+```{r import data}
+veh_data <- read_csv(file.path("raw-data","mts-survey-data","VEH.txt"), guess_max = 15000)
+```
+
+
+
 
 # Data Processing and Combination
 *This section should include a discussion of the processing and merging steps needed to create your basic data. The code to implement these steps should be included in chunks in this section. Once the final merged data has been created, you should use the dfSummary function again to summarize the data you will be using. You should also save a file containing all the objects you will use in your final analysis to the processed_data folder.*
@@ -114,4 +129,9 @@ This section should include a description of all the variables that are used in 
 
 # Discussion of Data
 
-*This section should include a discussion of any data patterns you notice based on the summaries created in the code above.*
+*This section should include a discussion of any data patterns you notice based on the summaries created in the code above.* 
+ 
+```{r}
+
+```
+
