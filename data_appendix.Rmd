@@ -100,6 +100,12 @@ Create a bullet list with the name of each variable in the dataset followed by a
 
 *Once you've described the variables, enter an R chunk by selecting Code -> Insert Chunk, or Ctrl+Alt+I, give it a name to describe the dataset you are importing. After importing, export a dataframe summary using the command.*
 
+```{r import data}
+
+hh_data <- read_csv(file.path("raw-data","mts-survey-data","HH.txt"), guess_max = 15000)
+```
+
+
 `export_summary_table(dfSummary(dataset_name))`
 
 *While it will make your resulting file long, you should not modify the chunk options to suppress printing of code and output. I would likely not include this in the documentation for an actual paper I was submitting, but including them here will let me read your code and the output message from R and may help identify data import concerns early in the process. Since these files will exist only electronically, their length is less of a concern. If you like to print out files to proofread and want me to help you shorten the printed versions, let me know. We can temporarily modify the chunk options for printing and restore them before you submit the assignment.*
