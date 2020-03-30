@@ -1,5 +1,5 @@
 ---
-title: "Data Appendix to \"Name of your paper\""
+title: "Data Appendix to \"What determines transit use in the Allston-Brighton neighborhood of Boston?\""
 author: "Victoria Tse"
 output: 
   pdf_document:
@@ -37,7 +37,7 @@ st_css()
 # Appendix description
 *Your Data Appendix should begin with a brief statement explaining its purpose like the following one.*
 
-This Data Appendix documents the data used in "Papter Title". It was prepared in a Rmarkdown document that contains both the documentation and the R code used to prepare the data used in the final estimation. It also includes descriptive statistics for both the original data and the final dataset, with a discussion of any issues of note.
+This Data Appendix documents the data used in "Paper Title". It was prepared in a Rmarkdown document that contains both the documentation and the R code used to prepare the data used in the final estimation. It also includes descriptive statistics for both the original data and the final dataset, with a discussion of any issues of note.
 
 The datasets used directly by the final analysis are saved in `processed-data/` at the end of this file.
 
@@ -72,55 +72,220 @@ A few tips:
 This section documents the datasets used in this analysis.
 
 ## Dataset description
-**Citation:** Put citation here in APA or other consistent format that you will use throughout the project. Include a hyperlink if applicable.  
-**DOI:** If the dataset has a documention identified (DOI) assigned put it here.  
-**Date Downloaded:** Identify when you downloaded the dataset.  
-**Filename(s):** raw_data/filename.csv *If you have a large number of files you can use a patten (see visit data below)*
-**Unit of observation:** What distinguishes different rows in your dataset?  
-**Dates covered:** What time frame does the data cover?  
+**Citation:** 
+Massachusetts Department of Transportation. (2012, June). Massachusetts Travel Survey.
+**DOI:** 
+N/A
+**Date Downloaded:**  
+3/7/20
+**Filename(s):** 
+
+- raw_data/filename.csv  
+- HH.txt 
+- PER.txt 
+- PLACE.txt 
+- VEH.txt
+**Unit of observation:**  
+Each unit is an individual person
+**Dates covered:**  
+6/14/10 - 10/24/11
 
 ### To obtain a copy
 
-Describe in a step-by-step fashion how an interested user could obtain the data.
+To obtain a copy, be a part of the Smith College institution and ask Professor Sayre! Also, agree to the necessary privacy measures to ensure the safety of the data.
 
 ### Importable version (if necessary)
+N/A
 
-**Filename(s):** importable-data/filename-importable.csv
+**Filename(s):**  
 
-In some cases the raw data is not directly importable. In this case, you should fully document every step you took to create the importable data in a subsection like this one. 
+- raw_data/filename.csv  
+- HH.txt 
+- PER.txt 
+- PLACE.txt 
+- VEH.txt
+
 
 ### Variable descriptions
 
-Create a bullet list with the name of each variable in the dataset followed by any information the user would need to understand it.
+- **RIBUS:** Use transit on a regular basis during the week  
+	
+	1 - Yes
+	
+	2- No 
+ 
+- **HHVEH:** Number of household vehicles in working condition 
 
-- **variable_name:** Variable description. 
-- **variable_name2:** Description of second variable.
+	Range 1-7 
+	8 - 8 or more 
+
+- **HISP:** Hipanic or Latino 
+	
+	1- Yes
+	
+	2- No 
+
+- **RACE:** Ethnicity or race
+	
+	1 White alone 
+	
+	2 Black or African American alone 
+	
+	3 Indigenous/ Alaska Native alone
+	
+	4 Asian alone 
+	
+	5 Native Hawaiian/ Pacific Islander alone 
+	
+	6 Some other race alone 
+	
+	7 Two or more races 
+
+- **OWN:** Homeownership 
+	
+	1 Own/Mortgaged 
+	
+	2 Renter
+
+- **INCOME:** Household Income in 2009 
+	
+	1 Less than $15,000
+	
+	2 $15,00-$24,999
+	
+	3 $25,000-$34,999 
+	
+	4 $35,000- $49,999 
+	
+	5 $50,000-$74,999 
+	
+	6 $75,000-$99,999 
+	
+	7 $100,00- $149,999 
+	
+	8 $150,000 or more 
+
+- **AGE:** Age in years  
+
+- **LIC:** Valid Driver's License 
+  
+  1- Yes
+  
+  2- No
+
+- **TRANS:** Have a transit pass? 
+
+  1- Yes  
+  
+  2- No 
+
+- **EMPLY:** Employed 
+
+  1- Yes 
+  
+  2- No 
+
+- **WORKS:** Does this person work? [If EMPLY = 1]
+
+  1- Yes 
+  
+  2- No 
+  
+- **WMODE:** Usual mode to work [WORKS=1] 
+
+  0- Works from home 
+  
+  1- Walk 
+  
+  2- Bike 
+  
+  3- Auto/Van/Truck Driver 
+  
+  4- Auto/Van/Truck Passenger 
+  
+  5- Bus/ Public Transit 
+  
+  6- Dial-A-Ride/ Paratransit 
+  
+  7- Taxi 
+  
+  8- Motorcycle Driver 
+  
+  9- Motorcycle Passenger 
+  
+- **EDUCA:** Level of Education 
+
+  1- Not a high school graduate, 12th or less (Includes very young children) 
+  
+  2-High school diploma or GED 
+  
+  3- Some college credit but no degree 
+  
+  4- Associate or technical school degree 
+  
+  5- Bachelor's or undergraduate degree 
+  
+  6- Graduate Degree (Includes professional degrees, MD, DDs, JD) 
+  
+- **ENROL:** Student 
+
+  1- Yes 
+  
+  2- No 
+  
+- **SMODE:** Usual mode to school [ENROL = 1] 
+  
+  0- Homeschooled 
+  
+  1- Walk 
+  
+  2- Bike 
+  
+  3- Auto/Van/Truck Driver 
+  
+  4- Auto/Van/Truck Passenger 
+  
+  5- Bus/ Public Transit 
+  
+  6- Dial-A-Ride/ Paratransit 
+  
+  7- Taxi 
+  
+  8- Motorcycle Driver 
+  
+  9- Motorcycle Passenger 
+
+- **BIKFA:** Bike facilities available at work/school? [ENROL = 1, WORK=1]  
+
+  1- Yes 
+  
+  2- No 
+  
+
 
 ### Data import code and summary
 
 *Once you've described the variables, enter an R chunk by selecting Code -> Insert Chunk, or Ctrl+Alt+I, give it a name to describe the dataset you are importing. After importing, export a dataframe summary using the command.*
 
-```{r import data}
+```{r import data 1}
 
 hh_data <- read_csv(file.path("raw-data","mts-survey-data","HH.txt"), guess_max = 15000)
 ```
-
+```{r import data 2}
+per_data <- read_csv(file.path("raw-data","mts-survey-data","PER.txt"), guess_max = 15000)
+``` 
+```{r import data 3}
+place_data <- read_csv(file.path("raw-data","mts-survey-data","PLACE.txt"), guess_max = 15000)
+``` 
+```{r import data 4}
+veh_data <- read_csv(file.path("raw-data","mts-survey-data","VEH.txt"), guess_max = 15000)
+```
 
 `export_summary_table(dfSummary(dataset_name))`
 
 *While it will make your resulting file long, you should not modify the chunk options to suppress printing of code and output. I would likely not include this in the documentation for an actual paper I was submitting, but including them here will let me read your code and the output message from R and may help identify data import concerns early in the process. Since these files will exist only electronically, their length is less of a concern. If you like to print out files to proofread and want me to help you shorten the printed versions, let me know. We can temporarily modify the chunk options for printing and restore them before you submit the assignment.*
 
-```{r import data}
-hh_data <- read_csv(file.path("raw-data","mts-survey-data","HH.txt"), guess_max = 15000)
-``` 
-```{r import data}
-per_data <- read_csv(file.path("raw-data","mts-survey-data","PER.txt"), guess_max = 15000)
-``` 
-```{r import data}
-place_data <- read_csv(file.path("raw-data","mts-survey-data","PLACE.txt"), guess_max = 15000)
-``` 
-```{r import data}
-veh_data <- read_csv(file.path("raw-data","mts-survey-data","VEH.txt"), guess_max = 15000)
+
 ```
 
 
