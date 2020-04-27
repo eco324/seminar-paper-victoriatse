@@ -1,5 +1,5 @@
 ---
-title: "Data Appendix to \"What determines transit use in the Allston-Brighton neighborhood of Boston?\""
+title: "Data Appendix to \"The role of homeownership in transit use in the Allston-Brighton neighborhood of Boston\""
 author: "Victoria Tse"
 output: 
   pdf_document:
@@ -10,7 +10,8 @@ output:
 ```{r setup, echo = F, message = F}
 knitr::opts_chunk$set(results = 'asis', cache = F)
 library(tidyverse)
-library(summarytools)
+library(summarytools) 
+library(stargazer)
 st_options(plain.ascii = F,
            style = "rmarkdown",
            footnote = NA,
@@ -37,7 +38,7 @@ st_css()
 # Appendix description
 *Your Data Appendix should begin with a brief statement explaining its purpose like the following one.*
 
-This Data Appendix documents the data used in "Paper Title". It was prepared in a Rmarkdown document that contains both the documentation and the R code used to prepare the data used in the final estimation. It also includes descriptive statistics for both the original data and the final dataset, with a discussion of any issues of note.
+This Data Appendix documents the data used in "The role of homeownership in transit use in the Allston-Brighton neighborhood of Boston". It was prepared in a Rmarkdown document that contains both the documentation and the R code used to prepare the data used in the final estimation. It also includes descriptive statistics for both the original data and the final dataset, with a discussion of any issues of note.
 
 The datasets used directly by the final analysis are saved in `processed-data/` at the end of this file.
 
@@ -72,22 +73,33 @@ A few tips:
 This section documents the datasets used in this analysis.
 
 ## Dataset description
+
 **Citation:** 
+
 Massachusetts Department of Transportation. (2012, June). Massachusetts Travel Survey.
+
 **DOI:** 
+
 N/A
+
 **Date Downloaded:**  
+
 3/7/20
+
 **Filename(s):** 
 
 - raw_data/filename.csv  
 - HH.txt 
 - PER.txt 
 - PLACE.txt 
-- VEH.txt
+
+
 **Unit of observation:**  
+
 Each unit is an individual person
+
 **Dates covered:**  
+
 6/14/10 - 10/24/11
 
 ### To obtain a copy
@@ -184,34 +196,6 @@ N/A
   1- Yes 
   
   2- No 
-
-- **WORKS:** Does this person work? [If EMPLY = 1]
-
-  1- Yes 
-  
-  2- No 
-  
-- **WMODE:** Usual mode to work [WORKS=1] 
-
-  0- Works from home 
-  
-  1- Walk 
-  
-  2- Bike 
-  
-  3- Auto/Van/Truck Driver 
-  
-  4- Auto/Van/Truck Passenger 
-  
-  5- Bus/ Public Transit 
-  
-  6- Dial-A-Ride/ Paratransit 
-  
-  7- Taxi 
-  
-  8- Motorcycle Driver 
-  
-  9- Motorcycle Passenger 
   
 - **EDUCA:** Level of Education 
 
@@ -232,34 +216,13 @@ N/A
   1- Yes 
   
   2- No 
-  
-- **SMODE:** Usual mode to school [ENROL = 1] 
-  
-  0- Homeschooled 
-  
-  1- Walk 
-  
-  2- Bike 
-  
-  3- Auto/Van/Truck Driver 
-  
-  4- Auto/Van/Truck Passenger 
-  
-  5- Bus/ Public Transit 
-  
-  6- Dial-A-Ride/ Paratransit 
-  
-  7- Taxi 
-  
-  8- Motorcycle Driver 
-  
-  9- Motorcycle Passenger 
 
 - **BIKFA:** Bike facilities available at work/school? [ENROL = 1, WORK=1]  
 
   1- Yes 
   
   2- No 
+
   
 
 
@@ -270,16 +233,15 @@ N/A
 ```{r import data 1}
 
 hh_data <- read_csv(file.path("raw-data","mts-survey-data","HH.txt"), guess_max = 15000)
-```
+``` 
+
 ```{r import data 2}
 per_data <- read_csv(file.path("raw-data","mts-survey-data","PER.txt"), guess_max = 15000)
-``` 
+```  
+
 ```{r import data 3}
 place_data <- read_csv(file.path("raw-data","mts-survey-data","PLACE.txt"), guess_max = 15000)
 ``` 
-```{r import data 4}
-veh_data <- read_csv(file.path("raw-data","mts-survey-data","VEH.txt"), guess_max = 15000)
-```
 
 `export_summary_table(dfSummary(dataset_name))`
 
@@ -292,17 +254,210 @@ veh_data <- read_csv(file.path("raw-data","mts-survey-data","VEH.txt"), guess_ma
 
 
 # Data Processing and Combination
-*This section should include a discussion of the processing and merging steps needed to create your basic data. The code to implement these steps should be included in chunks in this section. Once the final merged data has been created, you should use the dfSummary function again to summarize the data you will be using. You should also save a file containing all the objects you will use in your final analysis to the processed_data folder.*
+*This section should include a discussion of the processing and merging steps needed to create your basic data. The code to implement these steps should be included in chunks in this section. Once the final merged data has been created, you should use the dfSummary function again to summarize the data you will be using. You should also save a file containing all the objects you will use in your final analysis to the processed_data folder.* 
 
-# Analysis Variables
+``` 
+```{r Merge First 2 Data sets}
+Dummy_1 <- merge(hh_data, per_data,  
+                             by = "SAMPN")
+``` 
 
-This section should include a description of all the variables that are used in your final analysis. At the end of the section, you should save all of these variables in the processed_data folder of your repository.
+```{r Merge Previous Data set with 3rd data set to get full data}
+Preliminary_data <- merge(Dummy_1, place_data, 
+                 by ="SAMPN")
+``` 
+
+```{r Isolate the Allston individuals}
+  Final_data_half1 <- Preliminary_data[ which(Preliminary_data$ZIP=='02134'), ]
+``` 
+
+```{r Isolate the Brighton individuals}
+  Final_data_half2 <- Preliminary_data[ which(Preliminary_data$ZIP=='02135'), ]
+``` 
+
+```{r Merge Allston and Brighton data sets}
+Final_data <- rbind(Final_data_half1, Final_data_half2)
+```  
+ 
+```{r Adjust variables 1} 
+Modified_final_data<- Final_data %>%
+  
+  mutate(RIBUS_factor = as.factor(case_when(RIBUS == 1 ~ "Ride", RIBUS== 2 ~ "Doesn't_Ride"))) 
+``` 
+
+```{r Adjust variables 2}
+Modified_final_data<- Final_data %>% 
+   mutate(HISP_factor = as.factor(case_when(HISP == 1 ~ "Hispanic", HISP== 2 ~ "Non_Hispanic")))
+```
+
+```{r Adjust variables 3}
+Modified_final_data<- Final_data %>% 
+    mutate(OWN_factor = as.factor(case_when(OWN == 1 ~ "Homeowner", OWN== 2 ~ "Non_Homeowner"))) 
+```
+
+```{r Adjust variables 4}
+Modified_final_data<- Final_data %>% 
+  mutate(LIC_factor = as.factor(case_when(LIC == 1 ~ "License", LIC== 2 ~ "No_License")))  
+```  
+
+```{r Adjust variables 5}
+Modified_final_data<- Final_data %>% 
+  mutate(TRANS_factor = as.factor(case_when(TRANS== 1 ~ "Pass", TRANS== 2 ~ "No_Pass")))
+```
+
+```{r Adjust variables 6}
+Modified_final_data<- Final_data %>%  
+   mutate(TRANS_factor = as.factor(case_when(TRANS== 1 ~ "Pass", TRANS== 2 ~ "No_Pass"))) 
+```
+
+```{r Adjust variables 7}
+Modified_final_data<- Final_data %>%  
+  mutate(ENROL_factor = as.factor(case_when(ENROL == 1 ~ "Student", WORKS== 2 ~ "Non_Student"))) 
+``` 
+
+```{r Adjust variables 8}
+Modified_final_data<- Final_data %>% 
+  mutate(BIKFA_factor = as.factor(case_when(BIKFA == 1 ~ "Bike_Accessible", BIKFA == 2 ~ "No_Bike_Accessible")))  
+``` 
+
+```{r Adjust variables 9}
+Modified_final_data<- Final_data %>%  
+  mutate(RACE_factor = as.factor(case_when(RACE == 1 ~ "White", RACE== 2 ~ "Black", RACE== 3 ~ "Indigenous", RACE==  4 ~ "Asian", RACE== 5 ~ "Pacific Islander", RACE== 6 ~ "Other", RACE== 7 ~ "Multiracial"))) 
+``` 
+
+```{r Adjust variables 10} 
+Modified_final_data<- Final_data %>%   
+  mutate(INCOME_factor = as.factor(case_when(INCOME == 1 ~ "15", INCOME== 2 ~ "15-24", INCOME== 3 ~ "25-34", INCOME==  4 ~ "35-49", INCOME== 5 ~ "50-74", INCOME== 6 ~ "75-99", INCOME== 7 ~ "100-149", INCOME == 8 ~ "150" ))) 
+
+``` 
+
+```{r Adjust variables 11}
+Modified_final_data<- Final_data %>%  
+   mutate(EDUCA_factor = as.factor(case_when(EDUCA== 1 ~ "K-12", EDUCA== 2 ~ "HS-GED", EDUCA== 3 ~ "Some_college", EDUCA==  4 ~ "Associates", EDUCA== 5 ~ "Bachelors", EDUCA== 6 ~ "Graduate" )))
+```  
+
+
+```{r Create Sumary Statistics, echo= T, results= 'asis'}
+Summary_statistics <- Modified_final_data %>% 
+  select(RIBUS, OWN, HHVEH, LIC, TRANS, BIKFA, RACE, HISP, INCOME, EDUCA, ENROL, EMPLY, AGE) 
+
+stargazer(Summary_statistics, type = "latex", 
+          title = "Summary Statistics",
+          header = F, 
+          digits = 2) 
+
+```
+
+
+```{r Run regression 1 (just homeownership), results='asis'} 
+Regression_1 <- lm(RIBUS ~ factor(OWN), data = Modified_final_data)  
+
+stargazer(Regression_1, type = "latex", 
+          report = 'vct', 
+          intercept.bottom = F,
+          header = F)
+``` 
+
+```{r Run second regression (Transit availability), results= 'asis'}
+Regression_2 <- lm(RIBUS ~ factor(OWN) + HHVEH + factor(LIC) + factor(TRANS) + factor(BIKFA), data = Modified_final_data) 
+
+stargazer(Regression_2, type = "latex", 
+          report = 'vct', 
+          intercept.bottom = F,
+          header = F)
+
+```  
+
+```{r Run third regression (Race and ethnicity), results='asis'}
+Regression_3 <- lm(RIBUS ~ factor(OWN) + factor(RACE) + factor(HISP), data = Modified_final_data) 
+
+stargazer(Regression_3, type = "latex", 
+          report = 'vct', 
+          intercept.bottom = F,
+          header = F)
+
+``` 
+
+```{r Run fourth regression (Education), results= 'asis'}
+Regression_4 <- lm(RIBUS ~  factor(OWN) + factor(EDUCA), data = Modified_final_data) 
+
+stargazer(Regression_4, type = "latex", 
+          report = 'vct', 
+          intercept.bottom = F,
+          header = F)
+
+```
+
+```{r Run fifth regresion (Income), results='asis'}
+Regression_5 <- lm(RIBUS ~  factor(OWN) + factor(INCOME), data = Modified_final_data) 
+
+stargazer(Regression_5, type = "latex", 
+          report = 'vct', 
+          intercept.bottom = F,
+          header = F)
+``` 
+
+```{r Run sixth regression (Workers and Students), results='asis'} 
+Regression_6 <- lm(RIBUS ~  factor(OWN) + factor(EMPLY) + factor(ENROL), data = Modified_final_data) 
+
+stargazer(Regression_6, type = "latex", 
+          report = 'vct', 
+          intercept.bottom = F,
+          header = F)
+
+``` 
+
+
+```{r Run regression 7 (Age), results='asis'}
+Regression_8 <- lm(RIBUS ~  factor(OWN) + AGE, data = Modified_final_data) 
+
+stargazer(Regression_8, type = "latex", 
+          report = 'vct', 
+          intercept.bottom = F,
+          header = F)
+
+``` 
+
+
+
+
+
+# Analysis Variables 
+
+The dependent variable of the seven regressions given is  RIBUS. Massachusetts Travel Survey describes RIBUS as "use transit on a regular basis during the week." While "regular basis" is undefined, we can conclude that individuals who identified "yes" for RIBUS use public transit at least weekly. Unlike most indicator variables, "1" indicates "yes" and "2" indicates "no". This applies not only for RIBUS, but or all the indicator variables used. Therefore, when interpreting coefficient, a positive coefficient is one that moves closer to "no", indicating that the individual is less likely to use public transit regularly during the week. A negative coefficient moves closer to "yes", indicating that the individual is more likely to regularly use public transit.  
+
+OWN is the homeownership variable whose coefficient we pay close attention to throughout the eight regressions. As stated before, OWN is an indicator variable in which "1" signifies ownership and "2" denotes rentership. "7" indicate other, which we disregard so as to focus on the dynamics between homeowning and renting. We hypothesize that renters are more likely to use public transit than homeowners for a variety of reasons. The main reason is that renters tend to be more temporary members of the community, especially in Allston-Brighton, as many of the renters in this area are Boston University students. This lack of permanency could indicate not having access to cars or other services that could be used in lieu of public transit.  
+
+The variables used in Regression 2 speak more to the survey individual's access to transportation. HHVEH is a measure of household vehicles, ranging from 0 to 7. Anything above 8 is specified in a different variable, however, assuming diminishing returns, we have chosen to disregard households with eight or more vehicles. Next is LIC, which is an indicator variable of a driver's license, "1" signifying "yes" and "2" signifying "no". TRANS indicates the individual having a transit pass, again, "1" signifying "yes" and "2" signifying "no". Finally, BIKFA examines whether or not bike facilities are available at an individuals school or work, "1" signifying "yes" and "2" signifying "no". These variables were included to account for an individual's access to diferent modes of transit. We predict that those with a value of "1" for TRANS will prove more like to be using public transit regularly, as the pass provides greater access and might also be an indicator of access. Those with a value of "1" for LIC and BIKFA as well as a value of 1 or higher for HHVEH are predicted to be less likely to use public transit, as they indicated access to other modes of transportation. 
+
+Regression 3 variables look at race and ethnicity. For variable RACE, a value of	"1" signifies "White alone". "2" means "Black or African American alone", "3" "Indigenous/ Alaska Native alone","4" "Asian alone", "5" "Native Hawaiian/ Pacific Islander alone", "6" "Some other race alone", and "7" "two or more races". There is also a HISP indicator variable, with a "1" denoting "yes" and a 2 denoting "no". Race, ethnicity, and socioeconomic standing are very intertwined and in many cities, public transit is widely used by people of color, so it is likely that non white groups may demonstrate a greater likelihood of using public transit. However, given that this neighborhood is known for housing college students, this particularly nuance could potentially throw off predicted assumptions. 
+
+Regressions 4 and 5 cover education and income respectively. EDUCA is a factor categorical variable with six groups, with each group indicating a different level of education. Similarly, INCOME is factor categorical variable consisting of right groups, ranging from under $15,000 per year to $150,00+ per year. Education and income are closely interwined. One might assume that those who are higher educate and have higher income are less likely to regularly use public transit. This makes logical sense, as those with more disposable income have access to more expensive forms of transportation. However, given how transit accessible the main business district in Boston is and how difficult it is to find parking in many of the white collar business districts, there could be a reverse effect of those with higher income and education being more likely to take public transit regularly. 
+
+Regression 7 looks at two indicator variables EMPLY and ENROL. EMPLY is an indicator variable for whether or not an individual is employed, "1" meaning "yes" and "2" meaning "no". ENROL is an indicator variable for whether or not an individual is a student, "1" as "yes" and "2" as "no". We predict that students and workers are more likely to regularly use public transit as means of commuting. 
+
+Finally, Regression at the effect of age through variable AGE. Age is a continuous variable by year. We predict that younger individuals are more likely to be using public transit than older individuals. (This might be most effect to either include and age squared variable or categorically set groups. This may be added to the final draft.)
+  
+
+
 
 # Discussion of Data
 
-*This section should include a discussion of any data patterns you notice based on the summaries created in the code above.* 
- 
-```{r}
+Regression 1 looks solely at the relationship between regular weekly transit use (RIBUS) and homeownership (OWN). OWN is set to be a factor categorical variable, which when indicated in the regression, calls for one of the categories to be dropped. In the case of OWN, we observe that when OWN = "2" or "no", the corresponding coefficient is -0.211, which is noted with statistical significance. This means that if an individual is a renter, the chance of them using public transit regularly increases by 21.1%, which aligns with our hypothesis. However, since this regression only includes the OWN variable, it is very likely that this coefficient is not the true coefficient, as many other explanatory factors are not included, which is why we ran seven other regressions to observe how the OWN coefficient changed. 
 
-```
+In Regression 2, we regress RIBUS onto OWN, as well as LiC (driver's license), TRANS (transit pass), and BIKFA (bike facilities accessible). This regression was meant to assess the effect of an individual's access to various modes of transport on the OWN coefficient. We predicted that, when controlling for this access, the magnitude of the coefficient for homeownership should decrease. Our prediction was correct, as this regression saw the greatest decrease in magnitude of all of the six regressions that controlled for other factors. The coefficient's absolute value decreased from -0.211 to -0.114, meaning that with this update regression, renters are now 11.4% more likely to report using public transit regularly than homeowners. This finding was statistically significant. As predicted as, the presence of an additional household vehicle (HHVEH) and well as the possession of a driver's license (LIC) and access to bike facilities (BIKFA), decreased the likelihood of reporting "yes" to regularly using public transit. Similarly, if individuals reported having a transit pass (TRANS), they were more likely to report "yes" to regularly using transit. 
+
+Regression 3 focused the effects of race and ethnicity on homeownership, regressing RIBUS on OWN, RACE, and HISP. RACE is a factor categorical variable that encompasses seven race categories and HISP is a Hispanic indicator variable. The presence of the race variables increased the magnitude of the coefficient very slightly from -0.211 to -0.241. Though statistically significant, the results show that controlling for race in this regression has a small but positive effect on the rentership coefficient. Black identifying participants show a coefficient of -0.225, meaning that they are 22.5% more likely than white participants to report regularly using public transit. 
+
+Regression 4 controlled for education (EDUCA). EDUCA was yet another factor variable with nine categories representing levels of education ranging from no high school diploma to graduate diploma. The inclusion of the EDUCA variable only changes the homeownership coefficient magnitude by a very small amount, from -0.211 to -0.217. Many of the groups showed statistically insignificant results. 
+
+Regression 5 controls for income (INCOME). With the inclusion of the INCOME variable, the OWN coefficient sees a relatively small decrease in magnitude, from -0.211 to -0.196, which we noted with statistical significance. Most income groups above the lowest income group (under $15,000) showed a lower likelihood of reporting "yes" to regular transit use. The exceptions were income groups 5 ($50,000-$74,999) and 7 ($100,000-$149,000), although income group 7, along with 6 and 3, were not statistically significant. 
+
+Regression 6 regressed RIBUS onto OWN as well as EMPLY (worker indicator variable) and ENROL (student indicator variable). The presence of these two variables changed the maginatude of the OWN coefficient slightly from -0.211 to -0.238. While the EMPLY coefficient found a very weak and staistically insignificant relationship, the student coefficient saw a statistically significant, but very small coefficient. The regression found that those who are not identified as students are 7.3% more likely to report "no" for regular transit use. 
+
+Regression seven controlled for AGE, age being a continuous variable by year. The OWN coefficient decreased very slightly in magnitude from -0.211 to -0.206 with statistical significance. The AGE coefficient was a statistically significant value of 0.001, meaning that very every year of age, an individual is 0.1% more likely to report "no" for regular public transit use. (PERHAPS adding an age squared or making age categorical can help with better results.)
+
+For my reader: Do you think it would be a good use of my time to change the 1 as "yes" and 2 as "no" scale to the traditional 0 as "no" and 1 as "yes"? Is interpreting this too confusing? Also, I am considering doing summary statistics for homeowners and renters so that my conclusions can be less speculative. Additionally, as I have mentioned, I am also thinking of altering the age category to get better results. Let me know what you think of these ideas!
+
+
 
