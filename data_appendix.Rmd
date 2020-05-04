@@ -280,72 +280,43 @@ Final_data <- rbind(Final_data_half1, Final_data_half2)
 ```  
  
 ```{r Adjust variables 1} 
-<<<<<<< HEAD
-Modified_final_data<- Final_data %>%
+Modified_final_data <- Final_data %>%
   
   mutate(RIBUS = case_when(RIBUS== 1 ~ 1,
-                           RIBUS== 2 ~ 0)) 
-``` 
-
-```{r Adjust variables 2}
-Modified_final_data<- Final_data %>% 
-   mutate(HISP = case_when(HISP== 1 ~ 1, 
-                           HISP == 2 ~ 0))
-```
-
-```{r Adjust variables 3}
-Modified_final_data<- Final_data %>% 
-    mutate(OWN = case_when(OWN== 1 ~ 1, 
-                           OWN== 2 ~ 0)) 
-```
-
-```{r Adjust variables 4}
-Modified_final_data<- Final_data %>% 
-  mutate(LIC = case_when(LIC== 1 ~ 1, 
-                         LIC== 2 ~ 0))  
-```  
-
-```{r Adjust variables 5}
-Modified_final_data<- Final_data %>% 
-  mutate(TRANS = case_when(TRANS== 1 ~ 1,
-                           TRANS== 2~ 0))
-=======
-Modified_final_data <- Final_data %>%
-  mutate(RIBUS_factor = as.factor(case_when(RIBUS == 1 ~ "Ride", RIBUS== 2 ~ "Doesn't_Ride")),
-         HISP_factor = as.factor(case_when(HISP == 1 ~ "Hispanic", HISP== 2 ~ "Non_Hispanic")),
-         OWN_factor = as.factor(case_when(OWN == 1 ~ "Homeowner", OWN== 2 ~ "Non_Homeowner")),
-         LIC_factor = as.factor(case_when(LIC == 1 ~ "License", LIC== 2 ~ "No_License")),
-         TRANS_factor = as.factor(case_when(TRANS== 1 ~ "Pass", TRANS== 2 ~ "No_Pass")))
->>>>>>> c6b131937582d68b7224aa5f9869fa33481ac7da
-```
-
-
-```{r Adjust variables 7}
-Modified_final_data<- Final_data %>%  
-  mutate(ENROL = case_when(ENROL == 1 ~ 1, 
-                           ENROL== 2 ~ 0)) 
-``` 
-
-```{r Adjust variables 8}
-Modified_final_data<- Final_data %>% 
-  mutate(BIKFA = case_when(BIKFA == 1 ~ 1, 
-                           BIKFA == 2 ~ 0))  
-``` 
-
-```{r Adjust variables 9}
-Modified_final_data<- Final_data %>%  
-  mutate(RACE_factor = as.factor(case_when(RACE == 1 ~ "White", RACE== 2 ~ "Black", RACE== 3 ~ "Indigenous", RACE==  4 ~ "Asian", RACE== 5 ~ "Pacific Islander", RACE== 6 ~ "Other", RACE== 7 ~ "Multiracial"))) 
-``` 
-
-```{r Adjust variables 10} 
-Modified_final_data<- Final_data %>%   
-  mutate(INCOME_factor = as.factor(case_when(INCOME == 1 ~ "15", INCOME== 2 ~ "15-24", INCOME== 3 ~ "25-34", INCOME==  4 ~ "35-49", INCOME== 5 ~ "50-74", INCOME== 6 ~ "75-99", INCOME== 7 ~ "100-149", INCOME == 8 ~ "150" ))) 
-
-``` 
-
-```{r Adjust variables 11}
-Modified_final_data<- Final_data %>%  
-   mutate(EDUCA_factor = as.factor(case_when(EDUCA== 1 ~ "K-12", EDUCA== 2 ~ "HS-GED", EDUCA== 3 ~ "Some_college", EDUCA==  4 ~ "Associates", EDUCA== 5 ~ "Bachelors", EDUCA== 6 ~ "Graduate" )))
+                           RIBUS== 2 ~ 0),
+         HISP = case_when(HISP== 1 ~ 1, 
+                           HISP == 2 ~ 0),
+         OWN = case_when(OWN== 1 ~ 1, 
+                           OWN== 2 ~ 0),
+         LIC = case_when(LIC== 1 ~ 1, 
+                         LIC== 2 ~ 0),
+         TRANS = case_when(TRANS== 1 ~ 1,
+                           TRANS== 2~ 0),
+         ENROL = case_when(ENROL == 1 ~ 1, 
+                           ENROL== 2 ~ 0),
+         BIKFA = case_when(BIKFA == 1 ~ 1, 
+                           BIKFA == 2 ~ 0),
+         RACE_factor = as.factor(case_when(RACE == 1 ~ "White", 
+                                           RACE== 2 ~ "Black", 
+                                           RACE== 3 ~ "Indigenous", 
+                                           RACE==  4 ~ "Asian", 
+                                           RACE== 5 ~ "Pacific Islander", 
+                                           RACE== 6 ~ "Other", 
+                                           RACE== 7 ~ "Multiracial")),
+         INCOME_factor = as.factor(case_when(INCOME == 1 ~ "15", 
+                                             INCOME== 2 ~ "15-24", 
+                                             INCOME== 3 ~ "25-34", 
+                                             INCOME==  4 ~ "35-49", 
+                                             INCOME== 5 ~ "50-74", 
+                                             INCOME== 6 ~ "75-99", 
+                                             INCOME== 7 ~ "100-149", 
+                                             INCOME == 8 ~ "150" )),
+         EDUCA_factor = as.factor(case_when(EDUCA== 1 ~ "K-12", 
+                                            EDUCA== 2 ~ "HS-GED", 
+                                            EDUCA== 3 ~ "Some_college", 
+                                            EDUCA==  4 ~ "Associates", 
+                                            EDUCA== 5 ~ "Bachelors", 
+                                            EDUCA== 6 ~ "Graduate" )))
 ```  
 
 
@@ -365,7 +336,6 @@ stargazer(Summary_statistics, type = "latex",
 Regression_1 <- lm(RIBUS ~ OWN, data = Modified_final_data)  
 
 stargazer(Regression_1, type = "latex", 
-          report = 'vct', 
           intercept.bottom = F,
           header = F)
 ``` 
@@ -374,7 +344,6 @@ stargazer(Regression_1, type = "latex",
 Regression_2 <- lm(RIBUS ~ OWN + HHVEH + LIC + TRANS + BIKFA, data = Modified_final_data) 
 
 stargazer(Regression_2, type = "latex", 
-          report = 'vct', 
           intercept.bottom = F,
           header = F)
 
@@ -384,7 +353,6 @@ stargazer(Regression_2, type = "latex",
 Regression_3 <- lm(RIBUS ~ OWN + factor(RACE) + HISP, data = Modified_final_data) 
 
 stargazer(Regression_3, type = "latex", 
-          report = 'vct', 
           intercept.bottom = F,
           header = F)
 
@@ -394,7 +362,6 @@ stargazer(Regression_3, type = "latex",
 Regression_4 <- lm(RIBUS ~  OWN + factor(EDUCA), data = Modified_final_data) 
 
 stargazer(Regression_4, type = "latex", 
-          report = 'vct', 
           intercept.bottom = F,
           header = F)
 
@@ -404,7 +371,6 @@ stargazer(Regression_4, type = "latex",
 Regression_5 <- lm(RIBUS ~  OWN + factor(INCOME), data = Modified_final_data) 
 
 stargazer(Regression_5, type = "latex", 
-          report = 'vct', 
           intercept.bottom = F,
           header = F)
 ``` 
@@ -413,7 +379,6 @@ stargazer(Regression_5, type = "latex",
 Regression_6 <- lm(RIBUS ~  OWN + EMPLY + ENROL, data = Modified_final_data) 
 
 stargazer(Regression_6, type = "latex", 
-          report = 'vct', 
           intercept.bottom = F,
           header = F)
 
@@ -424,7 +389,6 @@ stargazer(Regression_6, type = "latex",
 Regression_8 <- lm(RIBUS ~ OWN + AGE, data = Modified_final_data) 
 
 stargazer(Regression_8, type = "latex", 
-          report = 'vct', 
           intercept.bottom = F,
           header = F)
 
