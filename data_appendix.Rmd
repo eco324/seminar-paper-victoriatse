@@ -282,42 +282,45 @@ Final_data <- rbind(Final_data_half1, Final_data_half2)
 ```{r Adjust variables 1} 
 Modified_final_data<- Final_data %>%
   
-  mutate(RIBUS_factor = as.factor(case_when(RIBUS == 1 ~ "Ride", RIBUS== 2 ~ "Doesn't_Ride"))) 
+  mutate(RIBUS = case_when(RIBUS== 1 ~ 1,
+                           RIBUS== 2 ~ 0)) 
 ``` 
 
 ```{r Adjust variables 2}
 Modified_final_data<- Final_data %>% 
-   mutate(HISP_factor = as.factor(case_when(HISP == 1 ~ "Hispanic", HISP== 2 ~ "Non_Hispanic")))
+   mutate(HISP = case_when(HISP== 1 ~ 1, 
+                           HISP == 2 ~ 0))
 ```
 
 ```{r Adjust variables 3}
 Modified_final_data<- Final_data %>% 
-    mutate(OWN_factor = as.factor(case_when(OWN == 1 ~ "Homeowner", OWN== 2 ~ "Non_Homeowner"))) 
+    mutate(OWN = case_when(OWN== 1 ~ 1, 
+                           OWN== 2 ~ 0)) 
 ```
 
 ```{r Adjust variables 4}
 Modified_final_data<- Final_data %>% 
-  mutate(LIC_factor = as.factor(case_when(LIC == 1 ~ "License", LIC== 2 ~ "No_License")))  
+  mutate(LIC = case_when(LIC== 1 ~ 1, 
+                         LIC== 2 ~ 0))  
 ```  
 
 ```{r Adjust variables 5}
 Modified_final_data<- Final_data %>% 
-  mutate(TRANS_factor = as.factor(case_when(TRANS== 1 ~ "Pass", TRANS== 2 ~ "No_Pass")))
+  mutate(TRANS = case_when(TRANS== 1 ~ 1,
+                           TRANS== 2~ 0))
 ```
 
-```{r Adjust variables 6}
-Modified_final_data<- Final_data %>%  
-   mutate(TRANS_factor = as.factor(case_when(TRANS== 1 ~ "Pass", TRANS== 2 ~ "No_Pass"))) 
-```
 
 ```{r Adjust variables 7}
 Modified_final_data<- Final_data %>%  
-  mutate(ENROL_factor = as.factor(case_when(ENROL == 1 ~ "Student", WORKS== 2 ~ "Non_Student"))) 
+  mutate(ENROL = case_when(ENROL == 1 ~ 1, 
+                           ENROL== 2 ~ 0)) 
 ``` 
 
 ```{r Adjust variables 8}
 Modified_final_data<- Final_data %>% 
-  mutate(BIKFA_factor = as.factor(case_when(BIKFA == 1 ~ "Bike_Accessible", BIKFA == 2 ~ "No_Bike_Accessible")))  
+  mutate(BIKFA = case_when(BIKFA == 1 ~ 1, 
+                           BIKFA == 2 ~ 0))  
 ``` 
 
 ```{r Adjust variables 9}
@@ -350,7 +353,7 @@ stargazer(Summary_statistics, type = "latex",
 
 
 ```{r Run regression 1 (just homeownership), results='asis'} 
-Regression_1 <- lm(RIBUS ~ factor(OWN), data = Modified_final_data)  
+Regression_1 <- lm(RIBUS ~ OWN, data = Modified_final_data)  
 
 stargazer(Regression_1, type = "latex", 
           report = 'vct', 
@@ -359,7 +362,7 @@ stargazer(Regression_1, type = "latex",
 ``` 
 
 ```{r Run second regression (Transit availability), results= 'asis'}
-Regression_2 <- lm(RIBUS ~ factor(OWN) + HHVEH + factor(LIC) + factor(TRANS) + factor(BIKFA), data = Modified_final_data) 
+Regression_2 <- lm(RIBUS ~ OWN + HHVEH + LIC + TRANS + BIKFA, data = Modified_final_data) 
 
 stargazer(Regression_2, type = "latex", 
           report = 'vct', 
@@ -369,7 +372,7 @@ stargazer(Regression_2, type = "latex",
 ```  
 
 ```{r Run third regression (Race and ethnicity), results='asis'}
-Regression_3 <- lm(RIBUS ~ factor(OWN) + factor(RACE) + factor(HISP), data = Modified_final_data) 
+Regression_3 <- lm(RIBUS ~ OWN + factor(RACE) + HISP, data = Modified_final_data) 
 
 stargazer(Regression_3, type = "latex", 
           report = 'vct', 
@@ -379,7 +382,7 @@ stargazer(Regression_3, type = "latex",
 ``` 
 
 ```{r Run fourth regression (Education), results= 'asis'}
-Regression_4 <- lm(RIBUS ~  factor(OWN) + factor(EDUCA), data = Modified_final_data) 
+Regression_4 <- lm(RIBUS ~  OWN + factor(EDUCA), data = Modified_final_data) 
 
 stargazer(Regression_4, type = "latex", 
           report = 'vct', 
@@ -389,7 +392,7 @@ stargazer(Regression_4, type = "latex",
 ```
 
 ```{r Run fifth regresion (Income), results='asis'}
-Regression_5 <- lm(RIBUS ~  factor(OWN) + factor(INCOME), data = Modified_final_data) 
+Regression_5 <- lm(RIBUS ~  OWN + factor(INCOME), data = Modified_final_data) 
 
 stargazer(Regression_5, type = "latex", 
           report = 'vct', 
@@ -398,7 +401,7 @@ stargazer(Regression_5, type = "latex",
 ``` 
 
 ```{r Run sixth regression (Workers and Students), results='asis'} 
-Regression_6 <- lm(RIBUS ~  factor(OWN) + factor(EMPLY) + factor(ENROL), data = Modified_final_data) 
+Regression_6 <- lm(RIBUS ~  OWN + EMPLY + ENROL, data = Modified_final_data) 
 
 stargazer(Regression_6, type = "latex", 
           report = 'vct', 
@@ -409,7 +412,7 @@ stargazer(Regression_6, type = "latex",
 
 
 ```{r Run regression 7 (Age), results='asis'}
-Regression_8 <- lm(RIBUS ~  factor(OWN) + AGE, data = Modified_final_data) 
+Regression_8 <- lm(RIBUS ~ OWN + AGE, data = Modified_final_data) 
 
 stargazer(Regression_8, type = "latex", 
           report = 'vct', 
