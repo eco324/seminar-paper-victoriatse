@@ -249,6 +249,7 @@ Preliminary_data <- merge(Dummy_1, place_data,
 
 ```{r Merge Allston and Brighton data sets}
 Final_data <- rbind(Final_data_half1, Final_data_half2)
+
 ``` 
 
 
@@ -294,6 +295,7 @@ mutate(RIBUS = case_when(RIBUS== 1 ~ 1,
                             EDUCA== 6 ~ "Graduate" )))
 ```
 
+
 ```{r Create Sumary Statistics, echo= T, results= 'asis'}
 Summary_statistics <- Modified_final_data %>% 
   select(RIBUS, OWN, HHVEH, LIC, TRANS, BIKFA, RACE, HISP, INCOME, EDUCA, ENROL, EMPLY, AGE) 
@@ -317,7 +319,8 @@ stargazer(Regression_1, type = "latex",
 ```{r Run second regression (Transit availability), results= 'asis'}
 Regression_2 <- lm(RIBUS ~ OWN + HHVEH + LIC + TRANS + BIKFA, data = Modified_final_data) 
 
-stargazer(Regression_2, type = "latex",
+
+stargazer(Regression_2, type = "latex", 
           intercept.bottom = F,
           header = F)
 
